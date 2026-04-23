@@ -1467,7 +1467,7 @@ Commercial reproduction requires written permission.</div>
   </div>
 
   <div class="callout info mb-24" style="border-color:var(--low); background:rgba(34,197,94,0.06); color:#86efac">
-    <strong>18 audit findings resolved.</strong> Each item below was verified directly against the live codebase on Apr 24, 2026. Remaining open items are listed at the bottom of this table.
+    <strong>19 audit findings resolved.</strong> Each item below was verified directly against the live codebase on Apr 24, 2026. Remaining open items are listed at the bottom of this table.
   </div>
 
   <style>
@@ -1490,7 +1490,7 @@ Commercial reproduction requires written permission.</div>
     <h3 style="margin-bottom:16px">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--low)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
       Completed Tasks
-      <span class="score-pill" style="background:rgba(34,197,94,0.12); color:var(--low); margin-left:8px">18 Done</span>
+      <span class="score-pill" style="background:rgba(34,197,94,0.12); color:var(--low); margin-left:8px">19 Done</span>
     </h3>
 
     <table class="done-table">
@@ -1603,6 +1603,14 @@ Commercial reproduction requires written permission.</div>
 
         <tr>
           <td><span class="done-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--low)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td>
+          <td><strong>LCP fixed — h1 opacity, logo fetchpriority + dimensions</strong><br><span style="color:var(--muted); font-size:12px">Hero has no CSS background image — LCP element is the &lt;h1&gt;. Fixed framer-motion hiding it at opacity:0 on initial render. Added fetchPriority="high" + width/height to navbar logo img. Added &lt;link rel="preload"&gt; for logo.png in &lt;head&gt;.</span></td>
+          <td><span class="done-source">Hero.tsx · Navbar.tsx · app/layout.tsx</span></td>
+          <td><span class="done-cat badge-critical">Performance</span></td>
+          <td style="color:var(--muted); font-size:12px">Critical #5 · Week 2 Action #9</td>
+        </tr>
+
+        <tr>
+          <td><span class="done-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--low)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td>
           <td><strong>Font display:swap on all typefaces (CLS fix)</strong><br><span style="color:var(--muted); font-size:12px">Playfair Display, Outfit, JetBrains Mono — all loaded via next/font with display:'swap' and preload:true</span></td>
           <td><span class="done-source">app/layout.tsx</span></td>
           <td><span class="done-cat badge-high">Performance</span></td>
@@ -1658,7 +1666,7 @@ Commercial reproduction requires written permission.</div>
     <h3 style="margin-bottom:16px">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--high)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
       Still Open
-      <span class="score-pill" style="background:rgba(249,115,22,0.12); color:var(--high); margin-left:8px">8 Remaining</span>
+      <span class="score-pill" style="background:rgba(249,115,22,0.12); color:var(--high); margin-left:8px">7 Remaining</span>
     </h3>
 
     <table class="open-table">
@@ -1670,11 +1678,6 @@ Commercial reproduction requires written permission.</div>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td><strong>Fix LCP — convert hero to &lt;img fetchpriority="high"&gt;</strong></td>
-          <td><span class="tag critical" style="font-size:11px">Critical</span></td>
-          <td style="color:var(--muted); font-size:12px">No fetchpriority or preload link found in Hero.tsx. Performance CWV remains at risk.</td>
-        </tr>
         <tr>
           <td><strong>Add explicit AI bot rules to robots.txt</strong></td>
           <td><span class="tag high" style="font-size:11px">High</span></td>
