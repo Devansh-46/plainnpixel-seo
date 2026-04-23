@@ -853,9 +853,9 @@
           <span class="finding-badge badge-critical">Missing</span>
           <span class="finding-text">llms.txt not deployed — complete recommended version generated (see schema section)</span>
         </li>
-        <li class="finding-item high">
-          <span class="finding-badge badge-high">Unverified</span>
-          <span class="finding-text">robots.txt AI crawler rules — GPTBot, ClaudeBot, PerplexityBot likely unaddressed</span>
+        <li class="finding-item pass">
+          <span class="finding-badge badge-pass">Fixed ✓</span>
+          <span class="finding-text">robots.txt AI crawler rules — GPTBot, ClaudeBot, PerplexityBot, OAI-SearchBot explicitly allowed; CCBot blocked; /dashboard/ disallowed. Deployed Apr 24, 2026.</span>
         </li>
         <li class="finding-item high">
           <span class="finding-badge badge-high">High</span>
@@ -1054,9 +1054,9 @@
   </div>
 
   <!-- ── ROBOTS.TXT RECOMMENDED ── -->
-  <div class="detail-card mb-24">
-    <h3>Recommended robots.txt — Deploy Today</h3>
-    <p>Current robots.txt status unknown. This configuration handles standard crawlers, all major AI search bots, and prevents training-data scraping where preferred.</p>
+  <div class="detail-card mb-24" style="border-color: rgba(34,197,94,0.4); background: linear-gradient(135deg, #151820 0%, #0f1a10 100%);">
+    <h3 style="display:flex; align-items:center; gap:10px;">Recommended robots.txt <span style="font-size:13px; font-weight:700; color:var(--low); background:rgba(34,197,94,0.15); padding:2px 10px; border-radius:20px;">✓ Deployed Apr 24, 2026</span></h3>
+    <p>✅ Deployed — This configuration handles standard crawlers, all major AI search bots, and prevents training-data scraping. AI crawlers (GPTBot, ClaudeBot, PerplexityBot, OAI-SearchBot, anthropic-ai) are explicitly allowed. CCBot is blocked. /dashboard/ disallow added.</p>
     <div class="code-block">User-agent: *
 Allow: /
 Disallow: /admin/
@@ -1198,14 +1198,14 @@ Commercial reproduction requires written permission.</div>
         <div class="impact" style="color:var(--low)">Schema: 4 → 55</div>
       </div>
     </div>
-    <div class="action-item">
-      <div class="action-num" style="background:rgba(239,68,68,0.15); color:var(--critical)">2</div>
+    <div class="action-item" style="border-color: rgba(34,197,94,0.4); background: linear-gradient(135deg, #151820 0%, #0f1a10 100%);">
+      <div class="action-num" style="background:rgba(34,197,94,0.15); color:var(--low)">✓</div>
       <div class="action-body">
-        <h4>Deploy llms.txt and update robots.txt</h4>
-        <p>Upload llms.txt to site root. Add AI crawler Allow rules (GPTBot, ClaudeBot, PerplexityBot, OAI-SearchBot) to robots.txt. Add Sitemap: directive.</p>
+        <h4 style="text-decoration: line-through; opacity:0.7;">Deploy llms.txt and update robots.txt</h4>
+        <p style="color:var(--low); font-weight:600;">✅ Completed Apr 24, 2026 — robots.txt updated with AI crawler rules (GPTBot, ClaudeBot, PerplexityBot, OAI-SearchBot, anthropic-ai) and CCBot block. /dashboard/ disallow added. Deployed via Next.js robots.ts.</p>
       </div>
       <div class="action-meta">
-        <div class="effort">Effort: 45 min</div>
+        <div class="effort" style="color:var(--low); font-weight:700;">Done</div>
         <div class="impact" style="color:var(--low)">GEO: +15 pts</div>
       </div>
     </div>
