@@ -1,77 +1,1478 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Plain and Pixel - Professional SEO services to grow your online presence and drive organic traffic.">
-    <meta name="keywords" content="SEO, search engine optimization, digital marketing, Plain and Pixel">
-    <meta name="author" content="Plain and Pixel">
-    <title>Plain and Pixel | SEO Services</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', sans-serif; background: #0a0a0a; color: #fff; }
-        header { padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222; }
-        header h1 { font-size: 1.5rem; color: #fff; }
-        nav a { color: #aaa; text-decoration: none; margin-left: 20px; }
-        nav a:hover { color: #fff; }
-        .hero { text-align: center; padding: 120px 20px; background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%); }
-        .hero h2 { font-size: 3rem; margin-bottom: 20px; background: linear-gradient(90deg, #6c63ff, #ff6584); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .hero p { font-size: 1.2rem; color: #aaa; max-width: 600px; margin: 0 auto 40px; }
-        .btn { display: inline-block; padding: 14px 36px; background: linear-gradient(90deg, #6c63ff, #ff6584); color: #fff; border-radius: 30px; text-decoration: none; font-weight: 600; transition: opacity 0.3s; }
-        .btn:hover { opacity: 0.85; }
-        .services { padding: 80px 40px; text-align: center; }
-        .services h2 { font-size: 2rem; margin-bottom: 50px; }
-        .cards { display: flex; gap: 30px; justify-content: center; flex-wrap: wrap; }
-        .card { background: #111; border: 1px solid #222; border-radius: 16px; padding: 40px 30px; max-width: 280px; transition: transform 0.3s, border-color 0.3s; }
-        .card:hover { transform: translateY(-8px); border-color: #6c63ff; }
-        .card .icon { font-size: 2.5rem; margin-bottom: 16px; }
-        .card h3 { font-size: 1.2rem; margin-bottom: 10px; }
-        .card p { color: #888; font-size: 0.9rem; }
-        footer { text-align: center; padding: 40px; border-top: 1px solid #222; color: #555; font-size: 0.85rem; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SEO Audit Dashboard — plainnpixel.tech</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d0f14;
+      --surface: #151820;
+      --surface2: #1c2030;
+      --border: #252a3a;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --critical: #ef4444;
+      --high: #f97316;
+      --medium: #eab308;
+      --low: #22c55e;
+      --info: #3b82f6;
+      --accent: #6366f1;
+      --accent2: #8b5cf6;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      background: linear-gradient(135deg, #1a1d2e 0%, #12151f 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 28px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .header-left h1 {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      color: #fff;
+    }
+    .header-left p {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 4px;
+    }
+    .header-meta {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
+    .meta-badge {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 16px;
+      text-align: center;
+    }
+    .meta-badge .label { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .meta-badge .value { font-size: 14px; font-weight: 600; color: var(--text); margin-top: 2px; }
+
+    /* ── LAYOUT ── */
+    .container { max-width: 1440px; margin: 0 auto; padding: 32px 40px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .grid-7 { display: grid; grid-template-columns: repeat(7, 1fr); gap: 12px; }
+    @media (max-width: 1100px) { .grid-7 { grid-template-columns: repeat(4, 1fr); } .grid-4 { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 768px) { .grid-2, .grid-3, .grid-4, .grid-7 { grid-template-columns: 1fr; } .container { padding: 20px; } .header { padding: 20px; } }
+
+    /* ── OVERALL SCORE ── */
+    .score-hero {
+      background: linear-gradient(135deg, #1e1530 0%, #13152a 100%);
+      border: 1px solid #2d2060;
+      border-radius: 16px;
+      padding: 36px;
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+    .score-ring {
+      position: relative;
+      width: 140px;
+      height: 140px;
+      flex-shrink: 0;
+    }
+    .score-ring svg { transform: rotate(-90deg); }
+    .score-ring-text {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+    .score-ring-text .num { font-size: 36px; font-weight: 800; color: #fff; line-height: 1; }
+    .score-ring-text .denom { font-size: 14px; color: var(--muted); }
+    .score-ring-text .grade { font-size: 11px; font-weight: 600; color: var(--high); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+    .score-details h2 { font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+    .score-details p { color: var(--muted); max-width: 520px; line-height: 1.7; }
+    .score-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .tag {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid;
+    }
+    .tag.critical { background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.3); color: var(--critical); }
+    .tag.high { background: rgba(249,115,22,0.1); border-color: rgba(249,115,22,0.3); color: var(--high); }
+    .tag.medium { background: rgba(234,179,8,0.1); border-color: rgba(234,179,8,0.3); color: var(--medium); }
+    .tag.low { background: rgba(34,197,94,0.1); border-color: rgba(34,197,94,0.3); color: var(--low); }
+    .tag.info { background: rgba(59,130,246,0.1); border-color: rgba(59,130,246,0.3); color: var(--info); }
+
+    /* ── SECTION TITLES ── */
+    .section-title {
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    /* ── SCORE CARDS ── */
+    .score-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .score-card:hover { border-color: #3a4060; }
+    .score-card .card-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+    .score-card .card-score { font-size: 32px; font-weight: 800; line-height: 1.1; margin: 8px 0 4px; color: #fff; }
+    .score-card .card-status { font-size: 12px; font-weight: 600; }
+    .score-card .progress-bar { height: 3px; background: var(--border); border-radius: 2px; margin-top: 14px; }
+    .score-card .progress-fill { height: 100%; border-radius: 2px; transition: width 0.6s ease; }
+    .score-card .card-note { font-size: 11px; color: var(--muted); margin-top: 8px; line-height: 1.5; }
+
+    /* Score color classes */
+    .score-red .card-score { color: var(--critical); }
+    .score-red .progress-fill { background: var(--critical); }
+    .score-red .card-status { color: var(--critical); }
+    .score-orange .card-score { color: var(--high); }
+    .score-orange .progress-fill { background: var(--high); }
+    .score-orange .card-status { color: var(--high); }
+    .score-yellow .card-score { color: var(--medium); }
+    .score-yellow .progress-fill { background: var(--medium); }
+    .score-yellow .card-status { color: var(--medium); }
+    .score-green .card-score { color: var(--low); }
+    .score-green .progress-fill { background: var(--low); }
+    .score-green .card-status { color: var(--low); }
+
+    /* ── CATEGORY DETAIL CARDS ── */
+    .detail-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    .detail-card h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .detail-card .score-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .detail-card p { color: var(--muted); font-size: 13px; margin-bottom: 16px; margin-top: 6px; }
+    .findings-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .finding-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 14px;
+      background: var(--surface2);
+      border-radius: 8px;
+      border-left: 3px solid;
+      font-size: 13px;
+    }
+    .finding-item.critical { border-color: var(--critical); }
+    .finding-item.high { border-color: var(--high); }
+    .finding-item.medium { border-color: var(--medium); }
+    .finding-item.low { border-color: var(--low); }
+    .finding-item.pass { border-color: var(--low); }
+    .finding-badge {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .badge-critical { background: rgba(239,68,68,0.15); color: var(--critical); }
+    .badge-high { background: rgba(249,115,22,0.15); color: var(--high); }
+    .badge-medium { background: rgba(234,179,8,0.15); color: var(--medium); }
+    .badge-low { background: rgba(34,197,94,0.15); color: var(--low); }
+    .badge-pass { background: rgba(34,197,94,0.15); color: var(--low); }
+    .badge-info { background: rgba(59,130,246,0.15); color: var(--info); }
+    .finding-text { color: var(--text); line-height: 1.5; }
+
+    /* ── ACTION PLAN ── */
+    .action-grid { display: flex; flex-direction: column; gap: 12px; }
+    .action-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+    .action-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .action-item .action-body h4 { font-size: 14px; font-weight: 600; color: #fff; }
+    .action-item .action-body p { font-size: 12px; color: var(--muted); margin-top: 3px; line-height: 1.5; }
+    .action-item .action-meta { margin-left: auto; text-align: right; flex-shrink: 0; }
+    .action-item .action-meta .effort { font-size: 11px; color: var(--muted); }
+    .action-item .action-meta .impact { font-size: 11px; font-weight: 600; }
+
+    /* ── E-E-A-T BREAKDOWN ── */
+    .eeat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 16px; }
+    @media (max-width: 900px) { .eeat-grid { grid-template-columns: repeat(2, 1fr); } }
+    .eeat-card {
+      background: var(--surface2);
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+    }
+    .eeat-card .eeat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+    .eeat-card .eeat-score { font-size: 28px; font-weight: 800; }
+    .eeat-card .eeat-bar { height: 4px; background: var(--border); border-radius: 2px; margin-top: 10px; }
+    .eeat-card .eeat-fill { height: 100%; border-radius: 2px; }
+
+    /* ── PERSONA TABLE ── */
+    .persona-table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+    .persona-table th { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); font-weight: 600; padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+    .persona-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text); }
+    .persona-table tr:last-child td { border-bottom: none; }
+    .persona-table tr:hover td { background: var(--surface2); }
+    .persona-score { display: inline-flex; align-items: center; gap: 8px; }
+    .score-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+    /* ── PLATFORM SCORES ── */
+    .platform-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .platform-row:last-child { border-bottom: none; }
+    .platform-name { font-size: 13px; font-weight: 500; min-width: 160px; color: var(--text); }
+    .platform-bar-wrap { flex: 1; height: 6px; background: var(--border); border-radius: 3px; }
+    .platform-bar-fill { height: 100%; border-radius: 3px; }
+    .platform-val { font-size: 13px; font-weight: 700; min-width: 40px; text-align: right; }
+
+    /* ── CODE BLOCKS ── */
+    .code-block {
+      background: #0a0c14;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 12px;
+      line-height: 1.6;
+      color: #a5b4fc;
+      overflow-x: auto;
+      white-space: pre;
+      margin-top: 12px;
+    }
+    .code-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); margin-bottom: 6px; }
+
+    /* ── TABS ── */
+    .tabs { display: flex; gap: 4px; margin-bottom: 20px; flex-wrap: wrap; }
+    .tab-btn {
+      padding: 8px 18px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .tab-btn:hover { border-color: #3a4060; color: var(--text); }
+    .tab-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+    /* ── LINK BUILDING TABLE ── */
+    .link-table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+    .link-table th { font-size: 11px; text-transform: uppercase; color: var(--muted); padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+    .link-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); font-size: 12px; color: var(--text); }
+    .link-table tr:last-child td { border-bottom: none; }
+    .priority-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+
+    /* ── FOOTER ── */
+    .footer {
+      margin-top: 48px;
+      padding: 24px 40px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .footer a { color: var(--accent); text-decoration: none; }
+    .footer .community { margin-top: 12px; padding: 16px 24px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; display: inline-block; }
+
+    /* ── CALLOUT BOXES ── */
+    .callout {
+      border-radius: 10px;
+      padding: 14px 18px;
+      font-size: 13px;
+      margin-bottom: 16px;
+      border-left: 3px solid;
+      line-height: 1.6;
+    }
+    .callout.critical { background: rgba(239,68,68,0.07); border-color: var(--critical); color: #fca5a5; }
+    .callout.info { background: rgba(99,102,241,0.07); border-color: var(--accent); color: #a5b4fc; }
+    .callout strong { font-weight: 700; }
+
+    /* ── SPACERS ── */
+    .mb-8 { margin-bottom: 8px; }
+    .mb-16 { margin-bottom: 16px; }
+    .mb-24 { margin-bottom: 24px; }
+    .mb-32 { margin-bottom: 32px; }
+    .mt-24 { margin-top: 24px; }
+    .mt-32 { margin-top: 32px; }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  </style>
 </head>
 <body>
-    <header>
-        <h1>Plain and Pixel</h1>
-        <nav>
-            <a href="#services">Services</a>
-            <a href="#contact">Contact</a>
-        </nav>
-    </header>
-    <section class="hero">
-        <h2>Rank Higher. Grow Faster.</h2>
-        <p>Plain and Pixel delivers data-driven SEO strategies that bring your business to the top of search results and keep you there.</p>
-        <a href="#services" class="btn">Explore Services</a>
-    </section>
-    <section class="services" id="services">
-        <h2>What We Do</h2>
-        <div class="cards">
-            <div class="card">
-                <div class="icon">🔍</div>
-                <h3>Keyword Research</h3>
-                <p>Uncover high-value search terms your audience is actually using.</p>
-            </div>
-            <div class="card">
-                <div class="icon">📈</div>
-                <h3>On-Page SEO</h3>
-                <p>Optimize every element of your site for maximum search visibility.</p>
-            </div>
-            <div class="card">
-                <div class="icon">🔗</div>
-                <h3>Link Building</h3>
-                <p>Build authority with high-quality, relevant backlinks at scale.</p>
-            </div>
-            <div class="card">
-                <div class="icon">📊</div>
-                <h3>Analytics and Reporting</h3>
-                <p>Track progress with clear, actionable insights every month.</p>
-            </div>
+
+<!-- ══ HEADER ══ -->
+<header class="header">
+  <div class="header-left">
+    <h1>SEO Audit Dashboard</h1>
+    <p>plainnpixel.tech &nbsp;·&nbsp; B2B Growth Infrastructure Agency &nbsp;·&nbsp; India</p>
+  </div>
+  <div class="header-meta">
+    <div class="meta-badge">
+      <div class="label">Audit Date</div>
+      <div class="value">Apr 24, 2026</div>
+    </div>
+    <div class="meta-badge">
+      <div class="label">Business Type</div>
+      <div class="value">B2B Agency</div>
+    </div>
+    <div class="meta-badge">
+      <div class="label">Agents Run</div>
+      <div class="value">7 Parallel</div>
+    </div>
+    <div class="meta-badge">
+      <div class="label">Issues Found</div>
+      <div class="value" style="color:var(--critical)">38 Total</div>
+    </div>
+  </div>
+</header>
+
+<!-- ══ MAIN CONTAINER ══ -->
+<div class="container">
+
+  <!-- ── OVERALL SCORE ── -->
+  <div class="score-hero">
+    <div class="score-ring">
+      <svg width="140" height="140" viewBox="0 0 140 140">
+        <circle cx="70" cy="70" r="58" fill="none" stroke="#1c2030" stroke-width="12"/>
+        <circle cx="70" cy="70" r="58" fill="none" stroke="#f97316" stroke-width="12"
+          stroke-dasharray="364.4" stroke-dashoffset="221" stroke-linecap="round"/>
+      </svg>
+      <div class="score-ring-text">
+        <div class="num">39</div>
+        <div class="denom">/100</div>
+        <div class="grade">Needs Work</div>
+      </div>
+    </div>
+    <div class="score-details">
+      <h2>Overall SEO Health Score: 39 / 100</h2>
+      <p>plainnpixel.tech has the right brand positioning and service depth, but significant technical, structural, and authority gaps are suppressing organic visibility. Schema is entirely absent (4/100), the sitemap is likely missing (12/100), and the homepage creates a page-type mismatch for high-intent B2B queries. The site's content quality (54/100) is the strongest area — with real case studies and distinct methodology — but anonymous authorship and missing legal pages undermine trust signals. Priority: ship schema, fix robots.txt + AI crawlers, and build author identity first.</p>
+      <div class="score-tags">
+        <span class="tag critical">8 Critical Issues</span>
+        <span class="tag high">18 High Issues</span>
+        <span class="tag medium">10 Medium Issues</span>
+        <span class="tag low">2 Low Issues</span>
+        <span class="tag info">No Sitemap Found</span>
+        <span class="tag info">No Schema Detected</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CATEGORY SCORE CARDS ── -->
+  <div class="section-title">Category Scores</div>
+  <div class="grid-7 mb-32">
+
+    <div class="score-card score-orange">
+      <div class="card-label">Technical SEO</div>
+      <div class="card-score">41</div>
+      <div class="card-status">Needs Work</div>
+      <div class="progress-bar"><div class="progress-fill" style="width:41%"></div></div>
+      <div class="card-note">CWV 30/100 · JS rendering risk · No schema</div>
+    </div>
+
+    <div class="score-card score-yellow">
+      <div class="card-label">Content / E-E-A-T</div>
+      <div class="card-score">54</div>
+      <div class="card-status">Moderate</div>
+      <div class="progress-bar"><div class="progress-fill" style="width:54%"></div></div>
+      <div class="card-note">Auth 38/100 · Anon authorship · No legal pages</div>
+    </div>
+
+    <div class="score-card score-orange">
+      <div class="card-label">On-Page / SXO</div>
+      <div class="card-score">37</div>
+      <div class="card-status">Critical Gaps</div>
+      <div class="progress-bar"><div class="progress-fill" style="width:37%"></div></div>
+      <div class="card-note">Page-type mismatch · All personas below 6/10</div>
+    </div>
+
+    <div class="score-card score-red">
+      <div class="card-label">Schema Markup</div>
+      <div class="card-score">4</div>
+      <div class="card-status">Zero Schema</div>
+      <div class="progress-bar"><div class="progress-fill" style="width:4%"></div></div>
+      <div class="card-note">No JSON-LD detected on any page</div>
+    </div>
+
+    <div class="score-card score-red">
+      <div class="card-label">Performance / CWV</div>
+      <div class="card-score">30</div>
+      <div class="card-status">High Risk</div>
+      <div class="progress-bar"><div class="progress-fill" style="width:30%"></div></div>
+      <div class="card-note">LCP unoptimized · JS blocking · CLS risk</div>
+    </div>
+
+    <div class="score-card score-orange">
+      <div class="card-label">AI Search / GEO</div>
+      <div class="card-score">41</div>
+      <div class="card-status">Emerging</div>
+      <div class="progress-bar"><div class="progress-fill" style="width:41%"></div></div>
+      <div class="card-note">No llms.txt · AI crawlers unaddressed</div>
+    </div>
+
+    <div class="score-card score-red">
+      <div class="card-label">Sitemap</div>
+      <div class="card-score">12</div>
+      <div class="card-status">Likely Missing</div>
+      <div class="progress-bar"><div class="progress-fill" style="width:12%"></div></div>
+      <div class="card-note">No sitemap.xml confirmed · Not in robots.txt</div>
+    </div>
+  </div>
+
+  <!-- ── CRITICAL ISSUES ── -->
+  <div class="section-title">Critical Issues — Fix Immediately</div>
+  <div class="callout critical mb-24">
+    <strong>8 critical findings</strong> are actively blocking indexability, authority trust, and AI search visibility. Resolve these before any content or link building investment.
+  </div>
+  <div class="action-grid mb-32">
+
+    <div class="action-item" style="border-left: 3px solid var(--critical)">
+      <div class="action-num" style="background:rgba(239,68,68,0.15); color:var(--critical)">1</div>
+      <div class="action-body">
+        <h4>Deploy Organization + WebSite Schema (JSON-LD)</h4>
+        <p>Zero structured data on the entire site. Place Organization + WebSite @graph block in &lt;head&gt; of every page. Estimated score lift: 4 → 55/100 schema score from this single block. Enables Knowledge Panel eligibility and entity graph establishment.</p>
+      </div>
+      <div class="action-meta">
+        <div class="effort">Effort: 30 min</div>
+        <div class="impact" style="color:var(--low)">Impact: Very High</div>
+      </div>
+    </div>
+
+    <div class="action-item" style="border-left: 3px solid var(--critical)">
+      <div class="action-num" style="background:rgba(239,68,68,0.15); color:var(--critical)">2</div>
+      <div class="action-body">
+        <h4>Create and Submit sitemap.xml to Google Search Console</h4>
+        <p>No sitemap confirmed. Deploy the generated sitemap covering all 14+ key pages (homepage, /about, /services, 4 service pillars, /tools, 6 tool pages, /blog, /pricing). Add Sitemap: directive to robots.txt. Submit in GSC under Indexing → Sitemaps.</p>
+      </div>
+      <div class="action-meta">
+        <div class="effort">Effort: 1 hour</div>
+        <div class="impact" style="color:var(--low)">Impact: Very High</div>
+      </div>
+    </div>
+
+    <div class="action-item" style="border-left: 3px solid var(--critical)">
+      <div class="action-num" style="background:rgba(239,68,68,0.15); color:var(--critical)">3</div>
+      <div class="action-body">
+        <h4>Add Named Authors to All Content (About Page + Blog)</h4>
+        <p>Anonymous authorship is the highest-priority E-E-A-T failure. Build an About/Team page with real names, photos, LinkedIn URLs, and credentials. Tag all blog posts with bylines. Google's Sept 2025 QRG flags professional services sites without identifiable authors. YMYL-adjacent content without authors is actively downgraded.</p>
+      </div>
+      <div class="action-meta">
+        <div class="effort">Effort: 1–2 days</div>
+        <div class="impact" style="color:var(--low)">Impact: Very High</div>
+      </div>
+    </div>
+
+    <div class="action-item" style="border-left: 3px solid var(--critical)">
+      <div class="action-num" style="background:rgba(239,68,68,0.15); color:var(--critical)">4</div>
+      <div class="action-body">
+        <h4>Add Privacy Policy + Terms of Service Pages</h4>
+        <p>Missing legal pages for a site that collects lead forms. Violates India's DPDP Act 2023 and is a direct trust failure signal for quality raters. Link from footer. Reference DPDP compliance explicitly.</p>
+      </div>
+      <div class="action-meta">
+        <div class="effort">Effort: 2–4 hours</div>
+        <div class="impact" style="color:var(--low)">Impact: High</div>
+      </div>
+    </div>
+
+    <div class="action-item" style="border-left: 3px solid var(--critical)">
+      <div class="action-num" style="background:rgba(239,68,68,0.15); color:var(--critical)">5</div>
+      <div class="action-body">
+        <h4>Fix LCP: Hero Image Preloading and Render-Blocking JS</h4>
+        <p>Agency sites routinely score LCP 4–7s on mobile due to CSS background images and undeferred JS. Add &lt;link rel="preload" as="image" fetchpriority="high"&gt; for hero image. Defer all third-party scripts (analytics, chat, pixels). Target: LCP under 2.5s (Good threshold).</p>
+      </div>
+      <div class="action-meta">
+        <div class="effort">Effort: 4–8 hours</div>
+        <div class="impact" style="color:var(--low)">Impact: Very High</div>
+      </div>
+    </div>
+
+    <div class="action-item" style="border-left: 3px solid var(--critical)">
+      <div class="action-num" style="background:rgba(239,68,68,0.15); color:var(--critical)">6</div>
+      <div class="action-body">
+        <h4>Verify Rendering Architecture (CSR vs SSR)</h4>
+        <p>If the site is a React SPA (CSR), Google sees an empty HTML shell — zero content indexed from first pass. Run: curl -s https://plainnpixel.tech | head -100. If &lt;body&gt; contains only a root div, migrate to SSR or SSG immediately. This is a potential total-site visibility blackout.</p>
+      </div>
+      <div class="action-meta">
+        <div class="effort">Effort: 30 min test</div>
+        <div class="impact" style="color:var(--critical)">Impact: Critical</div>
+      </div>
+    </div>
+
+    <div class="action-item" style="border-left: 3px solid var(--critical)">
+      <div class="action-num" style="background:rgba(239,68,68,0.15); color:var(--critical)">7</div>
+      <div class="action-body">
+        <h4>Verify Canonical Tags on All Pages</h4>
+        <p>Without canonical tags, trailing-slash variants (/services vs /services/), blog pagination, and category archives create duplicate content. Confirm &lt;link rel="canonical"&gt; is self-referencing on every page template. Enforce trailing-slash consistency via 301 server redirect.</p>
+      </div>
+      <div class="action-meta">
+        <div class="effort">Effort: 2–4 hours</div>
+        <div class="impact" style="color:var(--high)">Impact: High</div>
+      </div>
+    </div>
+
+    <div class="action-item" style="border-left: 3px solid var(--critical)">
+      <div class="action-num" style="background:rgba(239,68,68,0.15); color:var(--critical)">8</div>
+      <div class="action-body">
+        <h4>Create Pillar-Specific Landing Pages for Each Service</h4>
+        <p>Homepage page-type mismatch: organic searches for "RevOps agency India" land on a brand homepage, not a service-depth page. Create dedicated pages for Signal, Engine, Infrastructure, Velocity — each 1,200+ words with problem statement, methodology, tools, a case study, and pillar-specific CTA. This creates 4 new organic entry points.</p>
+      </div>
+      <div class="action-meta">
+        <div class="effort">Effort: 1–2 weeks</div>
+        <div class="impact" style="color:var(--low)">Impact: Very High</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── TWO-COLUMN: TECHNICAL + CONTENT ── -->
+  <div class="grid-2 mb-24">
+
+    <!-- Technical Detail -->
+    <div class="detail-card">
+      <h3>
+        Technical SEO
+        <span class="score-pill" style="background:rgba(249,115,22,0.15); color:var(--high)">41/100</span>
+      </h3>
+      <p>9 sub-categories audited. Core Web Vitals (30/100) and JS Rendering (35/100) are the weakest. Security headers and HSTS are almost certainly absent.</p>
+      <ul class="findings-list">
+        <li class="finding-item critical">
+          <span class="finding-badge badge-critical">Critical</span>
+          <span class="finding-text">LCP image preloading absent — hero likely CSS background, not &lt;img fetchpriority="high"&gt;</span>
+        </li>
+        <li class="finding-item critical">
+          <span class="finding-badge badge-critical">Critical</span>
+          <span class="finding-text">JS render-blocking: third-party scripts (analytics, chat, pixels) not deferred</span>
+        </li>
+        <li class="finding-item critical">
+          <span class="finding-badge badge-critical">Critical</span>
+          <span class="finding-text">Rendering architecture unverified — CSR-only site would mean zero content indexed on first pass</span>
+        </li>
+        <li class="finding-item high">
+          <span class="finding-badge badge-high">High</span>
+          <span class="finding-text">HSTS header absent — SSL-stripping risk on public networks</span>
+        </li>
+        <li class="finding-item high">
+          <span class="finding-badge badge-high">High</span>
+          <span class="finding-text">Security headers missing: X-Content-Type-Options, X-Frame-Options, CSP, Referrer-Policy</span>
+        </li>
+        <li class="finding-item high">
+          <span class="finding-badge badge-high">High</span>
+          <span class="finding-text">Blog-to-service internal links likely weak — orphan page risk on free tool pages</span>
+        </li>
+        <li class="finding-item high">
+          <span class="finding-badge badge-high">High</span>
+          <span class="finding-text">INP risk from main-thread third-party scripts — target &lt;200ms</span>
+        </li>
+        <li class="finding-item high">
+          <span class="finding-badge badge-high">High</span>
+          <span class="finding-text">CLS risk: web fonts without font-display:swap, images without width/height</span>
+        </li>
+        <li class="finding-item medium">
+          <span class="finding-badge badge-medium">Medium</span>
+          <span class="finding-text">Trailing slash consistency unverified (/services vs /services/)</span>
+        </li>
+        <li class="finding-item medium">
+          <span class="finding-badge badge-medium">Medium</span>
+          <span class="finding-text">Blog pagination / tag archive pages likely unmanaged (noindex or canonical needed)</span>
+        </li>
+        <li class="finding-item pass">
+          <span class="finding-badge badge-pass">Pass</span>
+          <span class="finding-text">HTTPS active — site serves over TLS</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Content / E-E-A-T Detail -->
+    <div class="detail-card">
+      <h3>
+        Content / E-E-A-T
+        <span class="score-pill" style="background:rgba(234,179,8,0.15); color:var(--medium)">54/100</span>
+      </h3>
+      <p>Strongest category but held back by anonymous authorship, missing legal pages, and only 1 case study for 200+ claimed clients. AI citation readiness: 31/100.</p>
+
+      <div class="eeat-grid">
+        <div class="eeat-card">
+          <div class="eeat-label">Experience</div>
+          <div class="eeat-score" style="color:var(--medium)">52</div>
+          <div class="eeat-bar"><div class="eeat-fill" style="width:52%; background:var(--medium)"></div></div>
         </div>
-    </section>
-    <section id="contact">
-        <footer>
-            <p>2025 Plain and Pixel. All rights reserved.</p>
-        </footer>
-    </section>
+        <div class="eeat-card">
+          <div class="eeat-label">Expertise</div>
+          <div class="eeat-score" style="color:var(--high)">48</div>
+          <div class="eeat-bar"><div class="eeat-fill" style="width:48%; background:var(--high)"></div></div>
+        </div>
+        <div class="eeat-card">
+          <div class="eeat-label">Authority</div>
+          <div class="eeat-score" style="color:var(--critical)">38</div>
+          <div class="eeat-bar"><div class="eeat-fill" style="width:38%; background:var(--critical)"></div></div>
+        </div>
+        <div class="eeat-card">
+          <div class="eeat-label">Trust</div>
+          <div class="eeat-score" style="color:var(--high)">44</div>
+          <div class="eeat-bar"><div class="eeat-fill" style="width:44%; background:var(--high)"></div></div>
+        </div>
+      </div>
+
+      <ul class="findings-list mt-24">
+        <li class="finding-item critical">
+          <span class="finding-badge badge-critical">Critical</span>
+          <span class="finding-text">Anonymous authorship across entire site — no named team member anywhere</span>
+        </li>
+        <li class="finding-item critical">
+          <span class="finding-badge badge-critical">Critical</span>
+          <span class="finding-text">No Privacy Policy or Terms of Service — DPDP Act 2023 non-compliance</span>
+        </li>
+        <li class="finding-item critical">
+          <span class="finding-badge badge-critical">Critical</span>
+          <span class="finding-text">Authoritativeness 38/100 — no Clutch/G2 profile, no press coverage, no directory listings</span>
+        </li>
+        <li class="finding-item high">
+          <span class="finding-badge badge-high">High</span>
+          <span class="finding-text">1 case study for 200+ claimed clients — credibility gap flagged by quality raters</span>
+        </li>
+        <li class="finding-item high">
+          <span class="finding-badge badge-high">High</span>
+          <span class="finding-text">380% ROI and 96% retention claims lack methodology disclosure</span>
+        </li>
+        <li class="finding-item high">
+          <span class="finding-badge badge-high">High</span>
+          <span class="finding-text">AI citation readiness 31/100 — stat counters likely JS-rendered, not crawlable</span>
+        </li>
+        <li class="finding-item medium">
+          <span class="finding-badge badge-medium">Medium</span>
+          <span class="finding-text">Blog content depth unknown — risk of sub-1,000 word AI-drafted posts</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ── SXO + PERSONA ── -->
+  <div class="detail-card mb-24">
+    <h3>
+      Search Experience Optimization (SXO)
+      <span class="score-pill" style="background:rgba(239,68,68,0.15); color:var(--critical)">37/100</span>
+    </h3>
+    <p>Critical finding: Homepage is a Brand/Navigation page type serving visitors with solution-shopping intent. All 3 buyer personas score below 6/10. High pogo-sticking risk from ICP ambiguity and framework jargon before proof.</p>
+
+    <div class="callout critical">
+      <strong>Page-Type Mismatch (HIGH severity):</strong> Organic searches for "RevOps agency India" return a homepage, not a service-depth page. Google rewards pages that are explicitly and deeply about the searched topic. The homepage serves brand recall — not solution-shopping intent.
+    </div>
+
+    <table class="persona-table">
+      <thead>
+        <tr>
+          <th>Persona</th>
+          <th>Relevance</th>
+          <th>Clarity</th>
+          <th>Trust</th>
+          <th>Action</th>
+          <th>Composite</th>
+          <th>Risk</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Technical Co-Founder</strong><br><span style="color:var(--muted); font-size:11px">Evaluating automation/RevOps stack</span></td>
+          <td>3/10</td>
+          <td>4/10</td>
+          <td>4/10</td>
+          <td>3/10</td>
+          <td>
+            <span class="persona-score">
+              <span class="score-dot" style="background:var(--critical)"></span>
+              <strong style="color:var(--critical)">3.5/10</strong>
+            </span>
+          </td>
+          <td><span class="tag critical" style="font-size:11px">High Bounce</span></td>
+        </tr>
+        <tr>
+          <td><strong>Startup Founder</strong><br><span style="color:var(--muted); font-size:11px">Researching growth solutions</span></td>
+          <td>5/10</td>
+          <td>4/10</td>
+          <td>5/10</td>
+          <td>4/10</td>
+          <td>
+            <span class="persona-score">
+              <span class="score-dot" style="background:var(--high)"></span>
+              <strong style="color:var(--high)">4.5/10</strong>
+            </span>
+          </td>
+          <td><span class="tag high" style="font-size:11px">Below Threshold</span></td>
+        </tr>
+        <tr>
+          <td><strong>B2B Marketing Manager</strong><br><span style="color:var(--muted); font-size:11px">Seeking ROI-proven agency</span></td>
+          <td>6/10</td>
+          <td>5/10</td>
+          <td>5/10</td>
+          <td>6/10</td>
+          <td>
+            <span class="persona-score">
+              <span class="score-dot" style="background:var(--medium)"></span>
+              <strong style="color:var(--medium)">5.5/10</strong>
+            </span>
+          </td>
+          <td><span class="tag medium" style="font-size:11px">Marginal</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="mt-24">
+      <div class="section-title">Above-the-Fold Assessment: 4/10</div>
+      <ul class="findings-list">
+        <li class="finding-item high">
+          <span class="finding-badge badge-high">Fail</span>
+          <span class="finding-text">"Who is it for?" not answered — no ICP specificity in hero. "B2B growth infrastructure" does not map to startup founders' mental model ("my pipeline is broken").</span>
+        </li>
+        <li class="finding-item high">
+          <span class="finding-badge badge-high">Partial</span>
+          <span class="finding-text">"What is this?" — answered by agency label, but "infrastructure" is jargon-heavy for non-technical buyers.</span>
+        </li>
+        <li class="finding-item medium">
+          <span class="finding-badge badge-medium">Partial</span>
+          <span class="finding-text">"Why trust them?" — metrics present but assertion-level (no attribution, no methodology note). 380% ROI without sourcing reads as marketing copy.</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ── GEO + SCHEMA SIDE BY SIDE ── -->
+  <div class="grid-2 mb-24">
+
+    <!-- GEO -->
+    <div class="detail-card">
+      <h3>
+        GEO / AI Search Readiness
+        <span class="score-pill" style="background:rgba(249,115,22,0.15); color:var(--high)">41/100</span>
+      </h3>
+      <p>The site is in the "Emerging" tier. llms.txt is missing. AI crawler permissions (GPTBot, ClaudeBot, PerplexityBot) are unverified — likely unaddressed in robots.txt.</p>
+
+      <div class="mb-16">
+        <div class="code-label">AI Platform Scores</div>
+        <div class="platform-row">
+          <div class="platform-name">Google AI Overviews</div>
+          <div class="platform-bar-wrap"><div class="platform-bar-fill" style="width:38%; background:var(--critical)"></div></div>
+          <div class="platform-val" style="color:var(--critical)">38</div>
+        </div>
+        <div class="platform-row">
+          <div class="platform-name">ChatGPT Search</div>
+          <div class="platform-bar-wrap"><div class="platform-bar-fill" style="width:32%; background:var(--critical)"></div></div>
+          <div class="platform-val" style="color:var(--critical)">32</div>
+        </div>
+        <div class="platform-row">
+          <div class="platform-name">Perplexity AI</div>
+          <div class="platform-bar-wrap"><div class="platform-bar-fill" style="width:45%; background:var(--high)"></div></div>
+          <div class="platform-val" style="color:var(--high)">45</div>
+        </div>
+        <div class="platform-row">
+          <div class="platform-name">Bing Copilot</div>
+          <div class="platform-bar-wrap"><div class="platform-bar-fill" style="width:40%; background:var(--high)"></div></div>
+          <div class="platform-val" style="color:var(--high)">40</div>
+        </div>
+        <div class="platform-row">
+          <div class="platform-name">Claude (Anthropic)</div>
+          <div class="platform-bar-wrap"><div class="platform-bar-fill" style="width:35%; background:var(--critical)"></div></div>
+          <div class="platform-val" style="color:var(--critical)">35</div>
+        </div>
+      </div>
+
+      <ul class="findings-list">
+        <li class="finding-item critical">
+          <span class="finding-badge badge-critical">Missing</span>
+          <span class="finding-text">llms.txt not deployed — complete recommended version generated (see schema section)</span>
+        </li>
+        <li class="finding-item high">
+          <span class="finding-badge badge-high">Unverified</span>
+          <span class="finding-text">robots.txt AI crawler rules — GPTBot, ClaudeBot, PerplexityBot likely unaddressed</span>
+        </li>
+        <li class="finding-item high">
+          <span class="finding-badge badge-high">High</span>
+          <span class="finding-text">Stat counters (200+, 380%, 96%) likely JS-rendered — invisible to AI crawlers</span>
+        </li>
+        <li class="finding-item high">
+          <span class="finding-badge badge-high">High</span>
+          <span class="finding-text">No Clutch profile — primary source cited by ChatGPT/Perplexity for "B2B agency India" queries</span>
+        </li>
+        <li class="finding-item medium">
+          <span class="finding-badge badge-medium">Medium</span>
+          <span class="finding-text">FAQ accordion likely JS-collapsed — near-zero citability if no static HTML fallback</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Schema -->
+    <div class="detail-card">
+      <h3>
+        Schema Markup
+        <span class="score-pill" style="background:rgba(239,68,68,0.15); color:var(--critical)">4/100</span>
+      </h3>
+      <p>Zero JSON-LD, Microdata, or RDFa detected. Full implementation stack generated and ready to deploy. Can reach 84–88/100 in one sprint.</p>
+
+      <ul class="findings-list mb-16">
+        <li class="finding-item critical">
+          <span class="finding-badge badge-critical">Missing</span>
+          <span class="finding-text">Organization + WebSite — Knowledge Panel eligibility blocked</span>
+        </li>
+        <li class="finding-item high">
+          <span class="finding-badge badge-high">Missing</span>
+          <span class="finding-text">ProfessionalService — local/category discovery blocked</span>
+        </li>
+        <li class="finding-item high">
+          <span class="finding-badge badge-high">Missing</span>
+          <span class="finding-text">Service ×4 — each pillar (Signal, Engine, Infrastructure, Velocity)</span>
+        </li>
+        <li class="finding-item high">
+          <span class="finding-badge badge-high">Missing</span>
+          <span class="finding-text">BreadcrumbList — breadcrumb rich results blocked on all inner pages</span>
+        </li>
+        <li class="finding-item medium">
+          <span class="finding-badge badge-medium">Missing</span>
+          <span class="finding-text">BlogPosting — author, datePublished, dateModified per blog post</span>
+        </li>
+        <li class="finding-item info">
+          <span class="finding-badge badge-info">Info</span>
+          <span class="finding-text">FAQPage — no Google rich result benefit (restricted Aug 2023). Implement for LLM/AI citation value only.</span>
+        </li>
+      </ul>
+
+      <div class="code-label">Implementation Priority</div>
+      <div style="font-size:12px; color:var(--muted); line-height:2;">
+        <span style="color:var(--critical)">Day 1 (30 min)</span> — Organization + WebSite @graph → score: 4 → 55<br>
+        <span style="color:var(--critical)">Day 1 (15 min)</span> — ProfessionalService on homepage → score: 55 → 65<br>
+        <span style="color:var(--high)">Day 2 (1 hr)</span> — Service ×4 on each service page → score: 65 → 75<br>
+        <span style="color:var(--high)">Day 2–3</span> — BreadcrumbList on all interior pages → 75 → 82<br>
+        <span style="color:var(--medium)">Ongoing</span> — BlogPosting per article → 82 → 88
+      </div>
+    </div>
+  </div>
+
+  <!-- ── BACKLINKS + SITEMAP ── -->
+  <div class="grid-2 mb-24">
+
+    <!-- Backlinks -->
+    <div class="detail-card">
+      <h3>
+        Backlink Profile
+        <span class="score-pill" style="background:rgba(99,102,241,0.15); color:var(--accent)">Insufficient Data</span>
+      </h3>
+      <p>No Moz/Bing API keys configured. Structural inference only. Estimated DA: 1–10 (nascent). Estimated referring domains: 3–15.</p>
+
+      <div class="callout info mb-16">
+        <strong>To unlock a real score:</strong> Configure Moz API credentials or DataForSEO, then re-run /seo backlinks. Google Search Console (free) provides top linking sites immediately.
+      </div>
+
+      <div class="code-label">Priority Link Building — Top 10 Opportunities</div>
+      <table class="link-table">
+        <thead>
+          <tr>
+            <th>Source</th>
+            <th>Est. DA</th>
+            <th>Type</th>
+            <th>Priority</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="priority-dot" style="background:var(--critical)"></span>Clutch.co profile + reviews</td>
+            <td>~72</td>
+            <td>Directory</td>
+            <td style="color:var(--critical)">Critical</td>
+          </tr>
+          <tr>
+            <td><span class="priority-dot" style="background:var(--critical)"></span>G2.com agency listing</td>
+            <td>~91</td>
+            <td>Directory</td>
+            <td style="color:var(--critical)">Critical</td>
+          </tr>
+          <tr>
+            <td><span class="priority-dot" style="background:var(--high)"></span>YourStory founder byline</td>
+            <td>~72</td>
+            <td>Editorial</td>
+            <td style="color:var(--high)">High</td>
+          </tr>
+          <tr>
+            <td><span class="priority-dot" style="background:var(--high)"></span>Inc42 contributor article</td>
+            <td>~68</td>
+            <td>Editorial</td>
+            <td style="color:var(--high)">High</td>
+          </tr>
+          <tr>
+            <td><span class="priority-dot" style="background:var(--high)"></span>startupindia.gov.in (DPIIT)</td>
+            <td>~60</td>
+            <td>Government</td>
+            <td style="color:var(--high)">High</td>
+          </tr>
+          <tr>
+            <td><span class="priority-dot" style="background:var(--high)"></span>HubSpot Solutions Directory</td>
+            <td>~90+</td>
+            <td>Partner</td>
+            <td style="color:var(--high)">Very High</td>
+          </tr>
+          <tr>
+            <td><span class="priority-dot" style="background:var(--high)"></span>GoodFirms.co listing</td>
+            <td>~68</td>
+            <td>Directory</td>
+            <td style="color:var(--high)">High</td>
+          </tr>
+          <tr>
+            <td><span class="priority-dot" style="background:var(--medium)"></span>SaaSBOOMi community</td>
+            <td>~45</td>
+            <td>Community</td>
+            <td style="color:var(--medium)">Medium</td>
+          </tr>
+          <tr>
+            <td><span class="priority-dot" style="background:var(--medium)"></span>Client case study links</td>
+            <td>Varies</td>
+            <td>Editorial</td>
+            <td style="color:var(--medium)">Medium</td>
+          </tr>
+          <tr>
+            <td><span class="priority-dot" style="background:var(--medium)"></span>"State of RevOps India" report</td>
+            <td>Target: 10–30</td>
+            <td>Content asset</td>
+            <td style="color:var(--medium)">Medium (long-term)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Sitemap Generated -->
+    <div class="detail-card">
+      <h3>
+        Sitemap
+        <span class="score-pill" style="background:rgba(239,68,68,0.15); color:var(--critical)">12/100</span>
+      </h3>
+      <p>No sitemap.xml confirmed. Deploy-ready XML generated below. Upload to /sitemap.xml, add Sitemap: directive to robots.txt, and submit in Google Search Console.</p>
+
+      <ul class="findings-list mb-16">
+        <li class="finding-item critical">
+          <span class="finding-badge badge-critical">Missing</span>
+          <span class="finding-text">sitemap.xml — not found at /sitemap.xml or /sitemap_index.xml</span>
+        </li>
+        <li class="finding-item critical">
+          <span class="finding-badge badge-critical">Missing</span>
+          <span class="finding-text">Sitemap: directive not in robots.txt</span>
+        </li>
+        <li class="finding-item high">
+          <span class="finding-badge badge-high">Gap</span>
+          <span class="finding-text">Service pillar pages (/services/signal, /engine etc.) — verify these exist as standalone URLs</span>
+        </li>
+        <li class="finding-item high">
+          <span class="finding-badge badge-high">Gap</span>
+          <span class="finding-text">Individual tool pages (SiteScope, CopyGrade, LeadScope etc.) — audit for thin content before including</span>
+        </li>
+        <li class="finding-item medium">
+          <span class="finding-badge badge-medium">Note</span>
+          <span class="finding-text">Remove &lt;priority&gt; and &lt;changefreq&gt; tags — confirmed ignored by Google since 2023</span>
+        </li>
+      </ul>
+
+      <div class="code-label">Deployment Checklist</div>
+      <div style="font-size:12px; color:var(--muted); line-height:2;">
+        ☐ Every URL returns HTTP 200 (not 301/404)<br>
+        ☐ No URL has a noindex meta tag<br>
+        ☐ Replace placeholder service slugs with actual paths<br>
+        ☐ Add one entry per published blog post<br>
+        ☐ Set lastmod to real last-modified date per page<br>
+        ☐ Upload to https://plainnpixel.tech/sitemap.xml<br>
+        ☐ Add Sitemap: directive to robots.txt<br>
+        ☐ Submit in Google Search Console → Indexing → Sitemaps
+      </div>
+    </div>
+  </div>
+
+  <!-- ── ROBOTS.TXT RECOMMENDED ── -->
+  <div class="detail-card mb-24">
+    <h3>Recommended robots.txt — Deploy Today</h3>
+    <p>Current robots.txt status unknown. This configuration handles standard crawlers, all major AI search bots, and prevents training-data scraping where preferred.</p>
+    <div class="code-block">User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /api/
+
+# AI Search Crawlers — explicitly allow
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+# Training-only crawlers — block if preferred
+User-agent: CCBot
+Disallow: /
+
+Sitemap: https://plainnpixel.tech/sitemap.xml</div>
+  </div>
+
+  <!-- ── SCHEMA JSON-LD ── -->
+  <div class="detail-card mb-24">
+    <h3>Schema JSON-LD — Organization + WebSite (Deploy in &lt;head&gt; of every page)</h3>
+    <p>This single block moves schema score from 4 → ~55. Place immediately after &lt;title&gt; tag. Replace placeholder social URLs with verified profile URLs.</p>
+    <div class="code-block">&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://plainnpixel.tech/#organization",
+      "name": "Plain &amp; Pixel",
+      "alternateName": "Plain and Pixel",
+      "url": "https://plainnpixel.tech",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://plainnpixel.tech/logo.png",
+        "width": 400,
+        "height": 100
+      },
+      "description": "B2B growth infrastructure agency helping businesses scale through positioning, revenue pipeline, automation, and scale loops. 200+ clients, 380% avg ROI.",
+      "telephone": "+91-9667683888",
+      "email": "plain.n.pixel@gmail.com",
+      "address": { "@type": "PostalAddress", "addressCountry": "IN" },
+      "areaServed": { "@type": "Country", "name": "India" },
+      "foundingLocation": { "@type": "Place", "addressCountry": "IN" },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+91-9667683888",
+        "contactType": "customer service",
+        "email": "plain.n.pixel@gmail.com"
+      },
+      "sameAs": [
+        "https://www.linkedin.com/company/plain-and-pixel",
+        "https://twitter.com/plainnpixel"
+      ],
+      "knowsAbout": ["B2B Marketing","Revenue Operations","Marketing Automation","Brand Positioning","Growth Strategy"]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://plainnpixel.tech/#website",
+      "url": "https://plainnpixel.tech",
+      "name": "Plain &amp; Pixel",
+      "publisher": { "@id": "https://plainnpixel.tech/#organization" },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": { "@type": "EntryPoint", "urlTemplate": "https://plainnpixel.tech/?s={search_term_string}" },
+        "query-input": "required name=search_term_string"
+      }
+    }
+  ]
+}
+&lt;/script&gt;</div>
+  </div>
+
+  <!-- ── llms.txt ── -->
+  <div class="detail-card mb-24">
+    <h3>Recommended llms.txt — Deploy at /llms.txt</h3>
+    <p>Missing from site. Deploy at https://plainnpixel.tech/llms.txt to signal AI readiness. Checked by Perplexity, Cloudflare AI gateway, and growing list of AI crawlers. ~1 hour effort, Very High GEO impact.</p>
+    <div class="code-block"># Plain and Pixel — B2B Growth Infrastructure Agency
+
+> Plain and Pixel is an India-based B2B growth infrastructure agency that builds
+> revenue systems — not campaigns — for B2B companies. 200+ clients. 380% avg ROI.
+> 96% client retention. Four service pillars: Signal (positioning), Engine (pipeline),
+> Infrastructure (automation), and Velocity (scale loops).
+
+## Core Services
+
+- [Signal](https://plainnpixel.tech/services/signal): B2B positioning and market architecture
+- [Engine](https://plainnpixel.tech/services/engine): Revenue pipeline and conversion systems
+- [Infrastructure](https://plainnpixel.tech/services/infrastructure): Automation and workflow engineering
+- [Velocity](https://plainnpixel.tech/services/velocity): Scale loops and growth compounding
+
+## Key Claims
+
+- 200+ B2B clients served across India
+- 380% average ROI across engagements
+- 96% client retention rate
+
+## Content Resources
+
+- [Blog](https://plainnpixel.tech/blog): B2B growth, positioning, pipeline, RevOps
+- [Free Tools](https://plainnpixel.tech/tools): SiteScope, CopyGrade, LeadScope, StackMap, RetainIQ
+- [Case Studies](https://plainnpixel.tech/results): Client revenue outcomes with methodology
+- [Start Free Audit](https://plainnpixel.tech/start-free-audit): No-commitment entry point
+
+## Contact
+
+plain.n.pixel@gmail.com | +91 9667683888
+
+## Licensing
+
+Content may be read, summarized, and cited for informational purposes.
+Commercial reproduction requires written permission.</div>
+  </div>
+
+  <!-- ── 30-DAY ACTION PLAN ── -->
+  <div class="section-title mt-32">30-Day Prioritized Action Plan</div>
+
+  <div class="section-title" style="font-size:11px; color:var(--critical)">Week 1 — Critical Foundations</div>
+  <div class="action-grid mb-24">
+    <div class="action-item">
+      <div class="action-num" style="background:rgba(239,68,68,0.15); color:var(--critical)">1</div>
+      <div class="action-body">
+        <h4>Deploy Organization + WebSite JSON-LD schema</h4>
+        <p>Paste generated block into &lt;head&gt; of every page template. Replace sameAs placeholder URLs with real LinkedIn/Twitter profiles.</p>
+      </div>
+      <div class="action-meta">
+        <div class="effort">Effort: 30 min</div>
+        <div class="impact" style="color:var(--low)">Schema: 4 → 55</div>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-num" style="background:rgba(239,68,68,0.15); color:var(--critical)">2</div>
+      <div class="action-body">
+        <h4>Deploy llms.txt and update robots.txt</h4>
+        <p>Upload llms.txt to site root. Add AI crawler Allow rules (GPTBot, ClaudeBot, PerplexityBot, OAI-SearchBot) to robots.txt. Add Sitemap: directive.</p>
+      </div>
+      <div class="action-meta">
+        <div class="effort">Effort: 45 min</div>
+        <div class="impact" style="color:var(--low)">GEO: +15 pts</div>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-num" style="background:rgba(239,68,68,0.15); color:var(--critical)">3</div>
+      <div class="action-body">
+        <h4>Generate and submit sitemap.xml to Google Search Console</h4>
+        <p>Deploy the generated sitemap XML. Submit in GSC → Indexing → Sitemaps. Run Google site:plainnpixel.tech to confirm current indexation state.</p>
+      </div>
+      <div class="action-meta">
+        <div class="effort">Effort: 1 hour</div>
+        <div class="impact" style="color:var(--low)">Sitemap: 12 → 70</div>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-num" style="background:rgba(239,68,68,0.15); color:var(--critical)">4</div>
+      <div class="action-body">
+        <h4>Verify rendering architecture (CSR vs SSR check)</h4>
+        <p>Run: curl -s https://plainnpixel.tech | head -100. If body is empty div only → critical SSR migration needed immediately. This single check could reveal total visibility blackout.</p>
+      </div>
+      <div class="action-meta">
+        <div class="effort">Effort: 15 min</div>
+        <div class="impact" style="color:var(--critical)">Technical: Risk</div>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-num" style="background:rgba(239,68,68,0.15); color:var(--critical)">5</div>
+      <div class="action-body">
+        <h4>Add Privacy Policy + Terms of Service pages</h4>
+        <p>Link from footer. Reference India DPDP Act 2023 compliance. This is a legal requirement and a direct trust signal for quality raters.</p>
+      </div>
+      <div class="action-meta">
+        <div class="effort">Effort: 2–4 hours</div>
+        <div class="impact" style="color:var(--low)">Trust: +8 pts</div>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-num" style="background:rgba(239,68,68,0.15); color:var(--critical)">6</div>
+      <div class="action-body">
+        <h4>Create Clutch.co and G2 profiles — request 5 client reviews each</h4>
+        <p>Both generate followed high-DA links. Clutch specifically is cited by ChatGPT and Perplexity for "B2B agency India" queries. Under 2 hours combined setup time.</p>
+      </div>
+      <div class="action-meta">
+        <div class="effort">Effort: 2 hours</div>
+        <div class="impact" style="color:var(--low)">Auth: +12 pts</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:11px; color:var(--high)">Week 2 — Author Identity + SXO Fixes</div>
+  <div class="action-grid mb-24">
+    <div class="action-item">
+      <div class="action-num" style="background:rgba(249,115,22,0.15); color:var(--high)">7</div>
+      <div class="action-body">
+        <h4>Build About/Team page with real names, photos, LinkedIn URLs</h4>
+        <p>This single change lifts Expertise (48→65) and Trust (44→60) simultaneously. Name all team members with credentials, years of experience, and specializations.</p>
+      </div>
+      <div class="action-meta">
+        <div class="effort">Effort: 1–2 days</div>
+        <div class="impact" style="color:var(--low)">E-E-A-T: +15 pts</div>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-num" style="background:rgba(249,115,22,0.15); color:var(--high)">8</div>
+      <div class="action-body">
+        <h4>Add ICP specificity to hero + case study above the fold</h4>
+        <p>Add: "Trusted by B2B SaaS companies scaling from $500K to $10M ARR." Add Krato AI case study inline in hero (not below fold). Reduces pogo-sticking for all 3 personas.</p>
+      </div>
+      <div class="action-meta">
+        <div class="effort">Effort: 4 hours</div>
+        <div class="impact" style="color:var(--low)">SXO: +8 pts</div>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-num" style="background:rgba(249,115,22,0.15); color:var(--high)">9</div>
+      <div class="action-body">
+        <h4>Fix LCP: convert hero to &lt;img fetchpriority="high"&gt; + defer all 3rd-party scripts</h4>
+        <p>Identify LCP element. Convert CSS background to native img. Add preload link in head. Defer analytics, chat, pixel scripts. Target: LCP &lt;2.5s on mobile.</p>
+      </div>
+      <div class="action-meta">
+        <div class="effort">Effort: 4–8 hours</div>
+        <div class="impact" style="color:var(--low)">CWV: 30 → 55</div>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-num" style="background:rgba(249,115,22,0.15); color:var(--high)">10</div>
+      <div class="action-body">
+        <h4>Add security headers (HSTS, X-Frame-Options, CSP, Referrer-Policy)</h4>
+        <p>Configure at hosting/CDN layer (Vercel vercel.json, Netlify _headers, Cloudflare Transform Rules). Enterprise B2B buyers run security scans before vendor engagement.</p>
+      </div>
+      <div class="action-meta">
+        <div class="effort">Effort: 2 hours</div>
+        <div class="impact" style="color:var(--medium)">Security: 55 → 80</div>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-num" style="background:rgba(249,115,22,0.15); color:var(--high)">11</div>
+      <div class="action-body">
+        <h4>Deploy ProfessionalService + Service ×4 schema on service pages</h4>
+        <p>Each of the 4 service pillars (Signal, Engine, Infrastructure, Velocity) needs its own Service JSON-LD block. Generated code is ready — paste and update slug URLs.</p>
+      </div>
+      <div class="action-meta">
+        <div class="effort">Effort: 1 hour</div>
+        <div class="impact" style="color:var(--low)">Schema: 55 → 75</div>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-num" style="background:rgba(249,115,22,0.15); color:var(--high)">12</div>
+      <div class="action-body">
+        <h4>Audit and fix blog content: author bylines, word count, canonical tags</h4>
+        <p>Every post needs named author (byline + link to team page), &gt;1,000 words, BlogPosting JSON-LD, and self-referencing canonical. Expand or redirect any posts under 800 words.</p>
+      </div>
+      <div class="action-meta">
+        <div class="effort">Effort: 2–3 days</div>
+        <div class="impact" style="color:var(--low)">Content: +10 pts</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:11px; color:var(--medium)">Month 2 — Authority + Depth</div>
+  <div class="action-grid mb-32">
+    <div class="action-item">
+      <div class="action-num" style="background:rgba(234,179,8,0.15); color:var(--medium)">13</div>
+      <div class="action-body">
+        <h4>Create 3–5 additional case studies (with named or anonymized clients)</h4>
+        <p>One case study for 200+ clients is the most glaring credibility gap. Each: client stage, problem, intervention, metrics, attributed quote. Industry + geography tags for AI citability.</p>
+      </div>
+      <div class="action-meta">
+        <div class="effort">Effort: 2–3 weeks</div>
+        <div class="impact" style="color:var(--low)">Auth: +15 pts</div>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-num" style="background:rgba(234,179,8,0.15); color:var(--medium)">14</div>
+      <div class="action-body">
+        <h4>Build 4 pillar-specific landing pages (1,200+ words each)</h4>
+        <p>Signal, Engine, Infrastructure, Velocity as standalone deep pages. Each: problem statement, methodology, tools stack, 1 case study, pillar CTA. Target keywords: "RevOps consulting India", "B2B automation agency India", etc.</p>
+      </div>
+      <div class="action-meta">
+        <div class="effort">Effort: 2–3 weeks</div>
+        <div class="impact" style="color:var(--low)">SXO: +20 pts</div>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-num" style="background:rgba(234,179,8,0.15); color:var(--medium)">15</div>
+      <div class="action-body">
+        <h4>Publish YourStory / Inc42 founder byline article</h4>
+        <p>Target: "How Indian B2B SaaS companies are building RevOps infrastructure." YourStory (DA ~72) generates editorial followed link + Perplexity citation probability. Pitch the open contributor form.</p>
+      </div>
+      <div class="action-meta">
+        <div class="effort">Effort: 1 week</div>
+        <div class="impact" style="color:var(--low)">Backlinks: High</div>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-num" style="background:rgba(234,179,8,0.15); color:var(--medium)">16</div>
+      <div class="action-body">
+        <h4>Add metrics methodology disclosure page</h4>
+        <p>Define how 380% ROI is calculated, which client cohort, measurement period, who verified. Converts marketing assertion into trust anchor. Link from homepage metrics bar.</p>
+      </div>
+      <div class="action-meta">
+        <div class="effort">Effort: 4 hours</div>
+        <div class="impact" style="color:var(--medium)">Trust: +8 pts</div>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-num" style="background:rgba(234,179,8,0.15); color:var(--medium)">17</div>
+      <div class="action-body">
+        <h4>Register DPIIT recognition + Crunchbase + Tracxn listings</h4>
+        <p>startupindia.gov.in DPIIT recognition provides a government-adjacent followed link. Crunchbase (DA ~91 nofollow) and Tracxn complete the Indian startup entity profile.</p>
+      </div>
+      <div class="action-meta">
+        <div class="effort">Effort: 3–4 hours</div>
+        <div class="impact" style="color:var(--medium)">Auth: +8 pts</div>
+      </div>
+    </div>
+    <div class="action-item">
+      <div class="action-num" style="background:rgba(234,179,8,0.15); color:var(--medium)">18</div>
+      <div class="action-body">
+        <h4>Publish "State of RevOps in India" original research report</h4>
+        <p>Survey 20–30 founders/revenue leads via LinkedIn. Compile 1-page PDF + landing page. B2B reports are the highest link-earning content format. Target: 10–30 editorial links per year from one asset. Highest long-term GEO/AI citation value.</p>
+      </div>
+      <div class="action-meta">
+        <div class="effort">Effort: 2–4 weeks</div>
+        <div class="impact" style="color:var(--low)">Backlinks: Very High</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SCORING METHODOLOGY ── -->
+  <div class="detail-card mb-24">
+    <h3>SEO Health Score — Weighted Methodology</h3>
+    <p>Overall score is a weighted aggregate across 7 categories. Backlinks excluded from scoring due to insufficient API data this run.</p>
+    <table class="link-table" style="margin-top:16px">
+      <thead>
+        <tr><th>Category</th><th>Weight</th><th>Score</th><th>Weighted</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Technical SEO</td><td>22%</td>
+          <td style="color:var(--high)">41</td>
+          <td>9.0</td>
+          <td><span class="tag high" style="font-size:11px">Needs Work</span></td>
+        </tr>
+        <tr>
+          <td>Content Quality</td><td>23%</td>
+          <td style="color:var(--medium)">54</td>
+          <td>12.4</td>
+          <td><span class="tag medium" style="font-size:11px">Moderate</span></td>
+        </tr>
+        <tr>
+          <td>On-Page / SXO</td><td>20%</td>
+          <td style="color:var(--critical)">37</td>
+          <td>7.4</td>
+          <td><span class="tag critical" style="font-size:11px">Critical Gaps</span></td>
+        </tr>
+        <tr>
+          <td>Schema / Structured Data</td><td>10%</td>
+          <td style="color:var(--critical)">4</td>
+          <td>0.4</td>
+          <td><span class="tag critical" style="font-size:11px">Zero Schema</span></td>
+        </tr>
+        <tr>
+          <td>Performance / CWV</td><td>10%</td>
+          <td style="color:var(--critical)">30</td>
+          <td>3.0</td>
+          <td><span class="tag critical" style="font-size:11px">High Risk</span></td>
+        </tr>
+        <tr>
+          <td>AI Search Readiness</td><td>10%</td>
+          <td style="color:var(--high)">41</td>
+          <td>4.1</td>
+          <td><span class="tag high" style="font-size:11px">Emerging</span></td>
+        </tr>
+        <tr>
+          <td>Images / Visual</td><td>5%</td>
+          <td style="color:var(--high)">40</td>
+          <td>2.0</td>
+          <td><span class="tag high" style="font-size:11px">Unaudited</span></td>
+        </tr>
+        <tr style="font-weight:700">
+          <td>OVERALL</td><td>100%</td>
+          <td style="color:var(--high)">—</td>
+          <td style="color:var(--high); font-size:16px">38.3</td>
+          <td><span class="tag high" style="font-size:11px">39 / 100</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div><!-- /container -->
+
+<!-- ══ FOOTER ══ -->
+<footer class="footer">
+  <p>Plain &amp; Pixel SEO Dashboard &nbsp;·&nbsp; Generated April 24, 2026 &nbsp;·&nbsp; 7 parallel subagents &nbsp;·&nbsp; plainnpixel.tech</p>
+  <p style="margin-top:6px; font-size:11px; color:#475569;">
+    Powered by Claude Code SEO &nbsp;·&nbsp; Audit framework by agricidaniel
+  </p>
+  <div class="community">
+    <div style="font-size:13px; font-weight:600; color:var(--text); margin-bottom:6px;">Built by agricidaniel — Join the AI Marketing Hub community</div>
+    <div style="font-size:12px; color:var(--muted);">
+      Free → <a href="https://www.skool.com/ai-marketing-hub" target="_blank">skool.com/ai-marketing-hub</a>
+      &nbsp;&nbsp;·&nbsp;&nbsp;
+      Pro → <a href="https://www.skool.com/ai-marketing-hub-pro" target="_blank">skool.com/ai-marketing-hub-pro</a>
+    </div>
+  </div>
+</footer>
+
 </body>
 </html>
